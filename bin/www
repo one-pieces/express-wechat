@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+// var app = require('../app');
+var app = require('../app_wechat');
 var debug = require('debug')('express-wechat:server');
 var http = require('http');
 
