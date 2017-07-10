@@ -12,4 +12,11 @@ app.get('/', function(req, res) {
   wechatApp.auth(req, res);
 });
 
+// 用于请求获取 access_token
+app.get('/getAccessToken', function(req, res) {
+  wechatApp.getAccessToken().then(function(data) {
+    res.send(data);
+  });
+});
+
 module.exports = app;
