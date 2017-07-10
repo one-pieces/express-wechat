@@ -19,4 +19,9 @@ app.get('/getAccessToken', function(req, res) {
   });
 });
 
+// 用于处理所有进入 3000 端口 post 的连接请求
+app.post('/', function(req, res) {
+  wechatApp.handleMsg(req, res);
+})
+
 module.exports = app;
