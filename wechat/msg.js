@@ -11,8 +11,8 @@ exports.txtMsg = function (toUser, fromUser, content) {
   var xmlContent = "<xml><ToUserName><![CDATA[" + toUser +"]]></ToUserName>";
   xmlContent += "<FromUserName><![CDATA[" + fromUser +"]]></FromUserName>";
   xmlContent += "<CreateTime>" + new Date().getTime() +"</CreateTime>";
-  xmlContent += "<MsgType><![CDATA[" + text +"]]></MsgType>";
-  xmlContent += "<Context><![CDATA[" + content +"]]></Context></xml>";
+  xmlContent += "<MsgType><![CDATA[text]]></MsgType>";
+  xmlContent += "<Content><![CDATA[" + content +"]]></Content></xml>";
   return xmlContent;
 };
 
@@ -20,7 +20,7 @@ exports.graphicMsg = function(toUser, fromUser, contentArr) {
   var xmlContent = "<xml><ToUserName><![CDATA[" + toUser +"]]></ToUserName>";
   xmlContent += "<FromUserName><![CDATA[" + fromUser +"]]></FromUserName>";
   xmlContent += "<CreateTime>" + new Date().getTime() +"</CreateTime>";
-  xmlContent += "<MsgType><![CDATA[" + text +"]]></MsgType>";
+  xmlContent += "<MsgType><![CDATA[news]]></MsgType>";
   xmlContent += "<ArticleCount>" + contentArr.length +"</ArticleCount>"
   xmlContent += "<Articles>";
   contentArr.map(function(item, index) {
