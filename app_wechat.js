@@ -1,6 +1,7 @@
 const express = require('express');
 const wechat = require('./wechat/wechat');
 const config = require('./config');
+var index = require('./routes/index');
 
 var app = express();
 
@@ -22,6 +23,9 @@ app.get('/getAccessToken', function(req, res) {
 // 用于处理所有进入 3000 端口 post 的连接请求
 app.post('/', function(req, res) {
   wechatApp.handleMsg(req, res);
-})
+});
+
+// Web页面
+var app = require('./app')(app);
 
 module.exports = app;

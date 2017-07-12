@@ -40,7 +40,7 @@ var WeChat = function(config) {
       }).on('error', function(err) {
         reject(err);
       });
-    })
+    });
   };
 
   this.requestPost = function(url, data) {
@@ -91,16 +91,16 @@ var WeChat = function(config) {
  */
 WeChat.prototype.auth = function(req, res) {
   // 动态修改菜单栏
-  // var that = this;
-  // this.getAccessToken().then(function(data) {
-  //   // 格式化请求连接
-  //   var url = util.format(that.apiURL.createMenu, that.apiDomain, data);
-  //   // 使用 Post 请求创建微信菜单
-  //   that.requestPost(url, JSON.stringify(menus)).then(function(data) {
-  //     // 将结果打印
-  //     console.log(data);
-  //   });
-  // });
+  var that = this;
+  this.getAccessToken().then(function(data) {
+    // 格式化请求连接
+    var url = util.format(that.apiURL.createMenu, that.apiDomain, data);
+    // 使用 Post 请求创建微信菜单
+    that.requestPost(url, JSON.stringify(menus)).then(function(data) {
+      // 将结果打印
+      console.log(data);
+    });
+  });
 
   // 1. 获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
   var signature = req.query.signature, // 微信加密签名
@@ -161,6 +161,9 @@ WeChat.prototype.getAccessToken = function() {
 
 WeChat.prototype.handleMsg = function(req, res) {
   var buffer = [];
+
+  // 实例微信消息加解密
+  var cryptoGraphy = new CryptoGraphy(this.config, req);
   // 监听 data 事件 用于接收数据
   req.on('data', function(data) {
     buffer.push(data);
@@ -169,6 +172,7 @@ WeChat.prototype.handleMsg = function(req, res) {
   req.on('end', function() {
     var msgXml = Buffer.concat(buffer).toString('utf-8');
     // 解析xml
+    console.log('msgXml', msgXml);
     parseString(msgXml, { explicitArray: false }, function(err, result) {
       if (!err) {
         // 打印解析结果
@@ -192,7 +196,7 @@ WeChat.prototype.handleMsg = function(req, res) {
               var content = '欢迎关注 one-pieces 公众号，一起斗图吧。回复以下数字：\n';
               content += '1. 你是谁\n';
               content += '2. 关于Node.js\n';
-              content += '回复 "文章" 可以得到图文推送哦\n';
+              content += '3. 回复 "文章" 可以得到图文推送哦\n';
               reportMsg = msg.txtMsg(fromUser, toUser, content);
               break;
             case 'click':
@@ -253,6 +257,8 @@ WeChat.prototype.handleMsg = function(req, res) {
         // 判断消息加解密方式，如果未加密则使用明文，对明文消息进行加密
         reportMsg = req.query.encrypt_type == 'aes' ? cryptoGraphy.encryptMsg(reportMsg) : reportMsg;
         // 返回给微信服务器
+
+        console.log('reportMsg', reportMsg);
         res.send(reportMsg);
       } else {
         // 打印错误信息
