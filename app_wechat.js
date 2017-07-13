@@ -1,11 +1,11 @@
 const express = require('express');
 const wechat = require('./wechat/wechat');
 const config = require('./config');
-var index = require('./routes/index');
+const urlConfig = require('./url_config');
 
 var app = express();
 
-var wechatApp = new wechat(config);
+var wechatApp = new wechat(Object.assign(config, urlConfig));
 
 // 用于处理所有进入 3000 端口 get 的连接请求
 app.get('/', function(req, res) {
